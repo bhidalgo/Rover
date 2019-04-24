@@ -1,7 +1,8 @@
-package com.example.rover
+package com.example.rover.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.rover.R
 
 class MainActivity : AppCompatActivity() {
 
