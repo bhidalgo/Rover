@@ -1,5 +1,6 @@
 package com.example.rover.model
 
+import com.example.rover.room.TypeConverter.roverCameraToStorable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -19,4 +20,8 @@ data class RoverCamera(
     @SerializedName("full_name")
     @Expose
     val cameraFullName: String
-)
+) {
+    override fun toString(): String {
+        return roverCameraToStorable(this)
+    }
+}
