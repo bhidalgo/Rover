@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Rover</string>
+
+    <string name="rover_photo_content_description">Photo taken by Rover.</string>
+    <string name="rover_photo_title_format">Taken by %s at %d Sol or on %s</string>
 </resources>

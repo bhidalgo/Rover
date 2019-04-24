@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="com.example.rover.util.DateUtil"/>
+
+        <variable name="roverPhoto" type="com.example.rover.model.RoverPhoto"/>
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+            android:id="@+id/rover_card_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="3dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_rover_card"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <ImageView
+                    android:id="@+id/rover_image_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/rover_photo_content_description"
+                    app:imgSrc="@{roverPhoto.imgSrc}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/rover_text_view"/>
+            <TextView
+                    android:id="@+id/rover_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:text="@{String.format(@string/rover_photo_title_format, roverPhoto.rover.roverName, roverPhoto.sol, DateUtil.toString(roverPhoto.earthDate))}"
+                    android:textAlignment="textStart"
+                    app:layout_constraintTop_toBottomOf="@id/rover_image_view"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
