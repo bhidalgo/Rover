@@ -3,4 +3,5 @@
 
     <string name="rover_photo_content_description">Photo taken by Rover.</string>
     <string name="rover_photo_title_format">Taken by %s at %d Sol or on %s</string>
+    <string name="loading_text">One sec. while we fetch your photos</string>
 </resources>

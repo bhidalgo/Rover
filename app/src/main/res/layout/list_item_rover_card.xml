@@ -8,9 +8,10 @@
 
     <com.google.android.material.card.MaterialCardView
             android:id="@+id/rover_card_view"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
+            android:layout_margin="4dp"
             app:cardCornerRadius="3dp"
             app:cardElevation="3dp">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +22,8 @@
                     android:id="@+id/rover_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="100dp"
+                    android:maxHeight="200dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/rover_photo_content_description"
                     app:imgSrc="@{roverPhoto.imgSrc}"

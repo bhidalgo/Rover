@@ -4,14 +4,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object DateUtil {
-    const val ROVER_DATE_FORMAT = "MMMMM dd yyyy"
+    const val RAW_DATE_FORMAT = "yyyy-MM-dd"
+    const val ROVER_DATE_FORMAT = "MMM dd yyyy"
 
     @JvmStatic
     fun toString(rawDate: String): String {
-        val format = SimpleDateFormat(ROVER_DATE_FORMAT, Locale.US)
+        val rawFormat = SimpleDateFormat(RAW_DATE_FORMAT, Locale.US)
+        val desiredFormat = SimpleDateFormat(ROVER_DATE_FORMAT, Locale.US)
 
-        val date = format.parse(rawDate)
+        val date = rawFormat.parse(rawDate)
 
-        return date.toString()
+        return desiredFormat.format(date)
     }
 }
