@@ -39,6 +39,7 @@ dependencies {
     implementation "com.google.dagger:dagger:$daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
+    implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
     implementation 'androidx.fragment:fragment:1.0.0'
