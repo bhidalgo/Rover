@@ -6,8 +6,10 @@ import com.squareup.picasso.Picasso
 
 @BindingAdapter("imgSrc")
 fun loadImage(imageView: ImageView, imgSrc: String?) {
+    val parsedImgSrc = imgSrc?.replace("http:", "https:")
+
     Picasso.get()
-        .load(imgSrc)
+        .load(parsedImgSrc)
         .fit()
         .centerCrop()
         .into(imageView)
