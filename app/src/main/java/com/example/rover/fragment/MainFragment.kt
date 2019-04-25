@@ -10,9 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE
 import com.example.rover.R
+import com.example.rover.activity.MainActivity
 import com.example.rover.api.repository.RoverPhotoRepository
 import com.example.rover.databinding.FragmentMainBinding
+import com.example.rover.util.enableBackButton
 import com.example.rover.util.roverComponent
 import com.example.rover.viewmodel.MainViewModel
 import javax.inject.Inject
@@ -35,7 +38,13 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.viewModel = mViewModel
+        mBinding.cardGridView.setItemViewCacheSize(100)
         observeRoverPhotos()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        enableBackButton(false)
     }
 
     @Inject
@@ -54,8 +63,8 @@ class MainFragment : Fragment() {
             with(mBinding.cardGridView) {
                 val currentAdapter: RoverPhotoAdapter? = (adapter as? RoverPhotoAdapter)
 
-                if(currentAdapter == null) {
-                    adapter = RoverPhotoAdapter(it)
+                if (currentAdapter == null) {
+                    adapter = RoverPhotoAdapter(it, activity as? MainActivity)
                 } else {
                     currentAdapter.photos = it
                     currentAdapter.notifyDataSetChanged()

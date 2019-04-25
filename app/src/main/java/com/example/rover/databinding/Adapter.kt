@@ -10,7 +10,6 @@ fun loadImage(imageView: ImageView, imgSrc: String?) {
 
     Picasso.get()
         .load(parsedImgSrc)
-        .fit()
-        .centerCrop()
+        .noFade()
         .into(imageView)
 }
