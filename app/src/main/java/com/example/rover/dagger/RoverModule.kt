@@ -1,5 +1,7 @@
 package com.example.rover.dagger
 
+import android.content.Context.CONNECTIVITY_SERVICE
+import android.net.ConnectivityManager
 import androidx.room.Room
 import com.example.rover.api.MARS_ROVER_API_BASE_URL
 import com.example.rover.api.MarsRoverApi
@@ -28,11 +30,17 @@ class RoverModule {
 
     @Provides
     @Singleton
-    fun provideRoverPhotoRepository(marsRoverApi: MarsRoverApi, roverPhotoDatabase: RoverPhotoDatabase) = RoverPhotoRepository(marsRoverApi, roverPhotoDatabase)
+    fun provideRoverPhotoRepository(connectivityManager: ConnectivityManager, marsRoverApi: MarsRoverApi, roverPhotoDatabase: RoverPhotoDatabase) = RoverPhotoRepository(connectivityManager, marsRoverApi, roverPhotoDatabase)
 
     @Provides
     @Singleton
     fun provideRoverPhotoDatabase(application: RoverApplication): RoverPhotoDatabase {
         return Room.databaseBuilder(application, RoverPhotoDatabase::class.java, DATABASE_NAME).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideConnectivityManager(application: RoverApplication): ConnectivityManager {
+        return application.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 }

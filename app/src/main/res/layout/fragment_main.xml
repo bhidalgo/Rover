@@ -3,36 +3,60 @@
     <data>
         <variable name="viewModel" type="com.example.rover.viewmodel.MainViewModel"/>
     </data>
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <FrameLayout
             android:id="@+id/layout_main_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <LinearLayout
-                android:id="@+id/layout_content_loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="16dp"
-                android:visibility="@{safeUnbox(viewModel.loadingProgressBarVisibility)}">
-            <ProgressBar
-                    android:id="@+id/loading_progress_bar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            <TextView
-                    android:id="@+id/loading_text"
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/layout_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{safeUnbox(viewModel.contentVisibility)}">
+            <LinearLayout
+                    android:id="@+id/layout_content_loading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:padding="16dp"
-                    android:text="@string/loading_text"/>
-        </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/card_grid_view"
+                    android:visibility="@{safeUnbox(viewModel.loadingProgressBarVisibility)}">
+                <ProgressBar
+                        android:id="@+id/loading_progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:id="@+id/loading_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/loading_text"/>
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/card_grid_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="@{safeUnbox(viewModel.roverPhotosVisibility)}"
+                    app:spanCount="2"
+                    app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"/>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <FrameLayout
+                android:id="@+id/layout_no_connection"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="@{safeUnbox(viewModel.roverPhotosVisibility)}"
-                app:spanCount="2"
-                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"/>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                android:layout_height="match_parent"
+                android:background="@color/semi_transparent_black"
+                android:visibility="@{safeUnbox(viewModel.networkErrorVisibility)}">
+            <TextView
+                    android:id="@+id/no_connection_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_connection"
+                    android:drawableTop="@drawable/ic_space_invaders"
+                    android:drawablePadding="16dp"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:layout_gravity="center"/>
+        </FrameLayout>
+    </FrameLayout>
 </layout>

@@ -7,5 +7,5 @@ import com.google.gson.annotations.SerializedName
 data class RoverPhotosResponse(
     @SerializedName("photos")
     @Expose
-    val photos: List<RoverPhoto>
+    val photos: ArrayList<RoverPhoto>
 )

@@ -1,6 +1,7 @@
 package com.example.rover.api
 
 import androidx.annotation.StringDef
+import com.example.rover.api.model.RoverManifestResponse
 import com.example.rover.api.model.RoverPhotosResponse
 import retrofit2.Call
 import retrofit2.http.GET
@@ -30,4 +31,13 @@ interface MarsRoverApi {
         @Query("page")
         page: Int = 1
     ): Call<RoverPhotosResponse>
+
+    @GET("mars-photos/api/v1/manifests/{rover}")
+    fun getRoverManifest(
+        @Rover
+        @Path("rover")
+        rover: String,
+        @Query("api_key")
+        apiKey: String = "DEMO_KEY"
+    ): Call<RoverManifestResponse>
 }

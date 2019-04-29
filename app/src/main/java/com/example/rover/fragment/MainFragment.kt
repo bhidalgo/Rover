@@ -1,28 +1,54 @@
 package com.example.rover.fragment
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringDef
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager.GAP_HANDLING_NONE
 import com.example.rover.R
-import com.example.rover.activity.MainActivity
+import com.example.rover.activity.navigateToDetailFragment
 import com.example.rover.api.repository.RoverPhotoRepository
 import com.example.rover.databinding.FragmentMainBinding
+import com.example.rover.databinding.ListItemRoverCardBinding
 import com.example.rover.util.enableBackButton
 import com.example.rover.util.roverComponent
 import com.example.rover.viewmodel.MainViewModel
+import com.google.android.material.snackbar.Snackbar
+import java.lang.Exception
 import javax.inject.Inject
 
-class MainFragment : Fragment() {
+@StringDef(ONLINE, OFFLINE)
+@Retention(AnnotationRetention.SOURCE)
+annotation class NetworkState
+
+private const val ONLINE = "online"
+private const val OFFLINE = "offline"
+
+class MainFragment : Fragment(), RoverPhotoAdapterViewListener {
     private lateinit var mBinding: FragmentMainBinding
     private lateinit var mViewModel: MainViewModel
+
+    @Inject
+    lateinit var connectivityManager: ConnectivityManager
+
+    override var canLoadMorePhotos: Boolean = true
+        get() {
+            return try {
+                connectivityManager.activeNetworkInfo?.isConnected == true && field
+            } catch (e: Exception) {
+                false
+            }
+        }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -45,17 +71,46 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         enableBackButton(false)
+        prepareNetwork()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
     @Inject
     fun configureViewModel(roverPhotoRepository: RoverPhotoRepository) {
         mViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java).apply {
             this.roverPhotoRepository = roverPhotoRepository
+            this.connectivityManager = this@MainFragment.connectivityManager
         }
 
-        mViewModel.fetchRoverPhotos()
+        mViewModel.fetchMostRecentRoverPhotos()
 
         observeRoverPhotos()
+    }
+
+    override fun onClick(v: View?) {
+        v?.let {
+            val binding = DataBindingUtil.getBinding<ViewDataBinding>(v)
+            when (binding) {
+                is ListItemRoverCardBinding -> activity?.navigateToDetailFragment(
+                    binding.roverPhoto?.imgSrc,
+                    binding.roverTextView.text.toString()
+                )
+                else -> {}
+            }
+        }
+    }
+
+    override fun onListFinished() {
+        mViewModel.currentSol.takeUnless { it == 0 }?.let {
+            canLoadMorePhotos = false
+            mViewModel.fetchRoverPhotos(sol = it - 1, blockScreen = false).invokeOnCompletion {
+                canLoadMorePhotos = true
+            }
+        }
     }
 
     private fun observeRoverPhotos() {
@@ -64,12 +119,43 @@ class MainFragment : Fragment() {
                 val currentAdapter: RoverPhotoAdapter? = (adapter as? RoverPhotoAdapter)
 
                 if (currentAdapter == null) {
-                    adapter = RoverPhotoAdapter(it, activity as? MainActivity)
+                    adapter = RoverPhotoAdapter(it, this@MainFragment)
                 } else {
-                    currentAdapter.photos = it
+                    currentAdapter.photos.addAll(it)
+                    currentAdapter.photos.distinct()
                     currentAdapter.notifyDataSetChanged()
                 }
             }
         })
+    }
+
+    private fun prepareNetwork() {
+        val networkRequest = NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+    }
+
+    val networkCallback = object : ConnectivityManager.NetworkCallback() {
+
+        @NetworkState
+        private var previousState: String? = null
+
+        override fun onLost(network: Network?) {
+            super.onLost(network)
+            if (previousState != OFFLINE) {
+                Snackbar.make(mBinding.layoutMainFragment, "Internet connection lost.", Snackbar.LENGTH_LONG).show()
+                previousState = OFFLINE
+            }
+        }
+
+        override fun onAvailable(network: Network?) {
+            super.onAvailable(network)
+            if (previousState != ONLINE) {
+                Snackbar.make(mBinding.layoutMainFragment, "Back online!", Snackbar.LENGTH_LONG).show()
+                if (mViewModel.roverPhotos.value == null) {
+                    mViewModel.fetchMostRecentRoverPhotos()
+                }
+                previousState = ONLINE
+            }
+        }
     }
 }
