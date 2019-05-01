@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.rover.R
 import com.example.rover.application.RoverApplication
@@ -26,9 +27,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        supportFragmentManager.findFragmentById(R.id.fragment_host)?.onOptionsItemSelected(item)
+        return when (item.itemId) {
             android.R.id.home -> {
                 onBackPressed()
                 true
