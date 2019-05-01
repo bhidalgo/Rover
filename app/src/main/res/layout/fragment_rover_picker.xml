@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="fragment" type="com.example.rover.fragment.RoverPickerFragment"/>
+    </data>
+
+    <LinearLayout
+            android:id="@+id/layout_rover_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Select A Rover"
+                  android:textSize="16sp"
+                  android:padding="16dp"
+                  android:textStyle="bold"/>
+        <TextView
+                android:id="@+id/item_curiosity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:drawablePadding="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{(v) -> fragment.selectRover(`Curiosity`)}"
+                android:text="Curiosity"/>
+
+        <TextView
+                android:id="@+id/item_opportunity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:drawablePadding="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{(v) -> fragment.selectRover(`Opportunity`)}"
+                android:text="Opportunity"/>
+
+        <TextView
+                android:id="@+id/item_spirit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:drawablePadding="16dp"
+                android:background="?attr/selectableItemBackground"
+                android:onClick="@{(v) -> fragment.selectRover(`Spirit`)}"
+                android:text="Spirit"/>
+    </LinearLayout>
+</layout>

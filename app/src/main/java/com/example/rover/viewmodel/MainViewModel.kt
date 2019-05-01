@@ -92,7 +92,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
     }
 
     private suspend fun displayPersistedPhotos() {
-        val persistedPhotos = roverPhotoRepository.getPersistedPhotos()
+        val persistedPhotos = roverPhotoRepository.getPersistedPhotos(currentRover)
 
         if (persistedPhotos.isNullOrEmpty()) {
             contentVisibility.postValue(View.GONE)

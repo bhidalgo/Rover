@@ -1,6 +1,7 @@
 package com.example.rover.activity
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -12,6 +13,7 @@ import com.example.rover.fragment.DetailFragment
 import com.example.rover.fragment.MainFragment
 
 class MainActivity : AppCompatActivity() {
+    var filterEnabled = false
     private lateinit var mBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +35,13 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (filterEnabled) {
+            menuInflater.inflate(R.menu.filter_menu, menu)
+        }
+        return super.onCreateOptionsMenu(menu)
     }
 }
 

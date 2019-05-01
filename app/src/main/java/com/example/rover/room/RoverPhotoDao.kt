@@ -21,6 +21,9 @@ interface RoverPhotoDao {
     @Query("SELECT * FROM $MANIFEST_TABLE_NAME WHERE name LIKE :rover LIMIT 1")
     fun getRoverManifest(@Rover rover: String): RoverManifest?
 
+    @Query("SELECT * FROM $PHOTO_TABLE_NAME WHERE rover LIKE :rover")
+    fun getRoverPhotos(@Rover rover: String): List<RoverPhoto>
+
     @Insert(onConflict = REPLACE)
     fun insertManifest(manifest: RoverManifest)
 

@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringDef
@@ -15,12 +16,19 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.rover.R
+import com.example.rover.activity.MainActivity
 import com.example.rover.activity.navigateToDetailFragment
+import com.example.rover.api.CURIOSITY
+import com.example.rover.api.OPPORTUNITY
+import com.example.rover.api.Rover
+import com.example.rover.api.SPIRIT
 import com.example.rover.api.repository.RoverPhotoRepository
 import com.example.rover.databinding.FragmentMainBinding
 import com.example.rover.databinding.ListItemRoverCardBinding
 import com.example.rover.util.enableBackButton
+import com.example.rover.util.enableFilterRoverList
 import com.example.rover.util.roverComponent
 import com.example.rover.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -34,7 +42,7 @@ annotation class NetworkState
 private const val ONLINE = "online"
 private const val OFFLINE = "offline"
 
-class MainFragment : Fragment(), RoverPhotoAdapterViewListener {
+class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragment.RoverPickerCallback {
     private lateinit var mBinding: FragmentMainBinding
     private lateinit var mViewModel: MainViewModel
 
@@ -50,9 +58,21 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener {
             }
         }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         roverComponent.inject(this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity() as? MainActivity)?.supportActionBar?.title = getString(
+            when (mViewModel.currentRover) {
+                CURIOSITY -> R.string.text_curiosity
+                OPPORTUNITY -> R.string.text_opportunity
+                SPIRIT -> R.string.text_spirit
+                else -> R.string.app_name
+            }
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -71,12 +91,38 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener {
     override fun onResume() {
         super.onResume()
         enableBackButton(false)
+        enableFilterRoverList(true)
         prepareNetwork()
     }
 
     override fun onPause() {
         super.onPause()
         connectivityManager.unregisterNetworkCallback(networkCallback)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.filter) {
+            val roverPickerDialog = RoverPickerFragment()
+            roverPickerDialog.show(requireFragmentManager(), "Rover Menu", this)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onRoverSelected(@Rover rover: String) {
+        mViewModel.roverPhotos.value?.clear()
+        mBinding.cardGridView.adapter = null
+        mBinding.cardGridView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        mViewModel.fetchMostRecentRoverPhotos(rover)
+        (requireActivity() as? MainActivity)?.supportActionBar?.title = getString(
+            when (rover.toLowerCase()) {
+                CURIOSITY -> R.string.text_curiosity
+                OPPORTUNITY -> R.string.text_opportunity
+                SPIRIT -> R.string.text_spirit
+                else -> R.string.app_name
+            }
+        )
     }
 
     @Inject

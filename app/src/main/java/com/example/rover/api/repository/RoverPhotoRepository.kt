@@ -64,9 +64,9 @@ class RoverPhotoRepository @Inject constructor(private val connectivityManager: 
         }
     }
 
-    suspend fun getPersistedPhotos(): ArrayList<RoverPhoto>? = coroutineScope {
+    suspend fun getPersistedPhotos(@Rover rover: String): ArrayList<RoverPhoto>? = coroutineScope {
        return@coroutineScope ArrayList<RoverPhoto>().apply {
-           addAll(roverPhotoDatabase.roverPhotoDao().getAllPhotos())
+           addAll(roverPhotoDatabase.roverPhotoDao().getRoverPhotos(rover))
        }
     }
 

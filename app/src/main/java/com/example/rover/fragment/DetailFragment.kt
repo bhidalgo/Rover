@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.rover.R
 import com.example.rover.databinding.FragmentDetailBinding
 import com.example.rover.util.enableBackButton
+import com.example.rover.util.enableFilterRoverList
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
@@ -49,6 +50,7 @@ class DetailFragment : Fragment(), CoroutineScope {
     override fun onResume() {
         super.onResume()
         enableBackButton(true)
+        enableFilterRoverList(false)
     }
 
     private fun loadFullImage(imgSrc: String) {
