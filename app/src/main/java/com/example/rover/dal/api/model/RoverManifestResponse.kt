@@ -1,4 +1,4 @@
-package com.example.rover.api.model
+package com.example.rover.dal.api.model
 
 import com.example.rover.model.RoverManifest
 import com.google.gson.annotations.Expose

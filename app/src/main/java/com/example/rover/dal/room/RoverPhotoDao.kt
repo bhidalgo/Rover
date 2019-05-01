@@ -1,10 +1,10 @@
-package com.example.rover.room
+package com.example.rover.dal.room
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
-import com.example.rover.api.Rover
+import com.example.rover.dal.api.Rover
 import com.example.rover.model.MANIFEST_TABLE_NAME
 import com.example.rover.model.PHOTO_TABLE_NAME
 import com.example.rover.model.RoverManifest

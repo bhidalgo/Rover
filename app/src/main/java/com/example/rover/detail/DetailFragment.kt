@@ -1,4 +1,4 @@
-package com.example.rover.fragment
+package com.example.rover.detail
 
 import android.graphics.Bitmap
 import android.os.Bundle

@@ -1,6 +1,6 @@
 package com.example.rover.model
 
-import com.example.rover.room.TypeConverter.roverCameraToStorable
+import com.example.rover.dal.room.TypeConverter.roverCameraToStorable
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 

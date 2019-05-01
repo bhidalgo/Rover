@@ -1,4 +1,4 @@
-package com.example.rover.viewmodel
+package com.example.rover.main.viewmodel
 
 import android.app.Application
 import android.net.ConnectivityManager
@@ -6,10 +6,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.rover.api.CURIOSITY
-import com.example.rover.api.Rover
-import com.example.rover.api.repository.ApiRequestLimitReachedException
-import com.example.rover.api.repository.RoverPhotoRepository
+import com.example.rover.dal.api.CURIOSITY
+import com.example.rover.dal.api.Rover
+import com.example.rover.dal.repository.ApiRequestLimitReachedException
+import com.example.rover.dal.repository.RoverPhotoRepository
 import com.example.rover.model.RoverPhoto
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext

@@ -1,4 +1,4 @@
-package com.example.rover.fragment
+package com.example.rover.main.list
 
 import android.view.LayoutInflater
 import android.view.View

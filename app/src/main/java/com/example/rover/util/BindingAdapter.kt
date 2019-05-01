@@ -1,4 +1,4 @@
-package com.example.rover.databinding
+package com.example.rover.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter

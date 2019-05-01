@@ -1,4 +1,4 @@
-package com.example.rover.fragment
+package com.example.rover.main.fragment
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -20,17 +20,19 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.rover.R
 import com.example.rover.activity.MainActivity
 import com.example.rover.activity.navigateToDetailFragment
-import com.example.rover.api.CURIOSITY
-import com.example.rover.api.OPPORTUNITY
-import com.example.rover.api.Rover
-import com.example.rover.api.SPIRIT
-import com.example.rover.api.repository.RoverPhotoRepository
+import com.example.rover.dal.api.CURIOSITY
+import com.example.rover.dal.api.OPPORTUNITY
+import com.example.rover.dal.api.Rover
+import com.example.rover.dal.api.SPIRIT
+import com.example.rover.dal.repository.RoverPhotoRepository
 import com.example.rover.databinding.FragmentMainBinding
 import com.example.rover.databinding.ListItemRoverCardBinding
+import com.example.rover.main.list.RoverPhotoAdapter
+import com.example.rover.main.list.RoverPhotoAdapterViewListener
 import com.example.rover.util.enableBackButton
 import com.example.rover.util.enableFilterRoverList
 import com.example.rover.util.roverComponent
-import com.example.rover.viewmodel.MainViewModel
+import com.example.rover.main.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -44,7 +46,8 @@ annotation class NetworkState
 private const val ONLINE = "online"
 private const val OFFLINE = "offline"
 
-class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragment.RoverPickerCallback {
+class MainFragment : Fragment(), RoverPhotoAdapterViewListener,
+    RoverPickerFragment.RoverPickerCallback {
     private lateinit var mBinding: FragmentMainBinding
     private lateinit var mViewModel: MainViewModel
     private lateinit var mNetworkCallback: NetworkCallback

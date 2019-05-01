@@ -5,13 +5,12 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.example.rover.R
 import com.example.rover.application.RoverApplication
 import com.example.rover.databinding.ActivityMainBinding
-import com.example.rover.fragment.DetailFragment
-import com.example.rover.fragment.MainFragment
+import com.example.rover.detail.DetailFragment
+import com.example.rover.main.fragment.MainFragment
 
 class MainActivity : AppCompatActivity() {
     var filterEnabled = false

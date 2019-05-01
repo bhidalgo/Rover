@@ -1,12 +1,12 @@
-package com.example.rover.api.repository
+package com.example.rover.dal.repository
 
 import android.net.ConnectivityManager
 import android.util.Log
-import com.example.rover.api.MarsRoverApi
-import com.example.rover.api.Rover
+import com.example.rover.dal.api.MarsRoverApi
+import com.example.rover.dal.api.Rover
 import com.example.rover.model.RoverManifest
 import com.example.rover.model.RoverPhoto
-import com.example.rover.room.RoverPhotoDatabase
+import com.example.rover.dal.room.RoverPhotoDatabase
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject

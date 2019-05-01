@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="viewModel" type="com.example.rover.viewmodel.MainViewModel"/>
+        <variable name="viewModel" type="com.example.rover.main.viewmodel.MainViewModel"/>
     </data>
     <FrameLayout
             android:id="@+id/layout_main_fragment"

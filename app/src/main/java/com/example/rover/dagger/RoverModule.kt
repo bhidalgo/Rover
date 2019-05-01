@@ -3,12 +3,12 @@ package com.example.rover.dagger
 import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import androidx.room.Room
-import com.example.rover.api.MARS_ROVER_API_BASE_URL
-import com.example.rover.api.MarsRoverApi
-import com.example.rover.api.repository.RoverPhotoRepository
+import com.example.rover.dal.api.MARS_ROVER_API_BASE_URL
+import com.example.rover.dal.api.MarsRoverApi
+import com.example.rover.dal.repository.RoverPhotoRepository
 import com.example.rover.application.RoverApplication
-import com.example.rover.room.DATABASE_NAME
-import com.example.rover.room.RoverPhotoDatabase
+import com.example.rover.dal.room.DATABASE_NAME
+import com.example.rover.dal.room.RoverPhotoDatabase
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

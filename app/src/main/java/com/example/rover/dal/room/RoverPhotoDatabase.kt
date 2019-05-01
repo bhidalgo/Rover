@@ -1,4 +1,4 @@
-package com.example.rover.room
+package com.example.rover.dal.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

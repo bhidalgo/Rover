@@ -3,9 +3,6 @@ package com.example.rover.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.rover.api.CURIOSITY
-import com.example.rover.api.OPPORTUNITY
-import com.example.rover.api.SPIRIT
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 

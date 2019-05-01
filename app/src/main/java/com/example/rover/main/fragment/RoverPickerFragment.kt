@@ -1,4 +1,4 @@
-package com.example.rover.fragment
+package com.example.rover.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import com.example.rover.R
-import com.example.rover.api.Rover
+import com.example.rover.dal.api.Rover
 import com.example.rover.databinding.FragmentRoverPickerBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

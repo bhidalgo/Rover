@@ -1,8 +1,8 @@
-package com.example.rover.api
+package com.example.rover.dal.api
 
 import androidx.annotation.StringDef
-import com.example.rover.api.model.RoverManifestResponse
-import com.example.rover.api.model.RoverPhotosResponse
+import com.example.rover.dal.api.model.RoverManifestResponse
+import com.example.rover.dal.api.model.RoverPhotosResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

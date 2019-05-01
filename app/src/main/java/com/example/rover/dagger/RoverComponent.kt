@@ -2,7 +2,7 @@ package com.example.rover.dagger
 
 import com.example.rover.activity.MainActivity
 import com.example.rover.application.RoverApplication
-import com.example.rover.fragment.MainFragment
+import com.example.rover.main.fragment.MainFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

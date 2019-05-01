@@ -1,4 +1,4 @@
-package com.example.rover.room
+package com.example.rover.dal.room
 
 import androidx.room.TypeConverter
 import com.example.rover.model.RoverCamera
