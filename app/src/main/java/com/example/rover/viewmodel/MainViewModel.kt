@@ -47,7 +47,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
     lateinit var connectivityManager: ConnectivityManager
 
     fun fetchRoverPhotos(@Rover rover: String = currentRover, sol: Int, blockScreen: Boolean = true) = launch {
-        if(blockScreen) {
+        if (blockScreen) {
             blockScreenToLoad()
         }
 
@@ -72,7 +72,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
     }
 
     fun fetchMostRecentRoverPhotos(@Rover rover: String = currentRover, blockScreen: Boolean = true) = launch {
-        if(blockScreen) {
+        if (blockScreen) {
             blockScreenToLoad()
         }
 
