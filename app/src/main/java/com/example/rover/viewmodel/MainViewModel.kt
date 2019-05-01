@@ -64,7 +64,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
             allowUserToInteractWithPersistedData()
         } else if (fetchedPhotos != null) {
             currentSol = sol
-            roverPhotos.postValue(fetchedPhotos)
+            val currentRoverPhotos = roverPhotos.value ?: ArrayList()
+            currentRoverPhotos.addAll(fetchedPhotos)
+            roverPhotos.postValue(currentRoverPhotos)
             allowUserToInteractWithPersistedData()
         }
     }
@@ -85,7 +87,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
 
         if (maxSol == null && connectivityManager.activeNetworkInfo?.isConnected != true && roverPhotos.value.isNullOrEmpty()) {
             displayPersistedPhotos()
-        } else if (maxSol == null && roverPhotos.value != null) {
+        } else if (maxSol == null && !roverPhotos.value.isNullOrEmpty()) {
             allowUserToInteractWithPersistedData()
         } else if (maxSol != null) {
             currentSol = maxSol

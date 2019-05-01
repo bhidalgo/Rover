@@ -135,9 +135,9 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragm
             this.connectivityManager = this@MainFragment.connectivityManager
         }
 
-        mViewModel.fetchMostRecentRoverPhotos()
-
-        observeRoverPhotos()
+        if (mViewModel.roverPhotos.value.isNullOrEmpty()) {
+            mViewModel.fetchMostRecentRoverPhotos()
+        }
     }
 
     override fun onClick(v: View?) {
@@ -169,9 +169,7 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragm
 
                 if (currentAdapter == null) {
                     adapter = RoverPhotoAdapter(it, this@MainFragment)
-                } else {
-                    currentAdapter.photos.addAll(it)
-                    currentAdapter.photos.distinct()
+                } else if (it.isNotEmpty()) {
                     currentAdapter.notifyDataSetChanged()
                 }
             }
