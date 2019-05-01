@@ -32,6 +32,8 @@ import com.example.rover.util.enableFilterRoverList
 import com.example.rover.util.roverComponent
 import com.example.rover.viewmodel.MainViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -45,6 +47,7 @@ private const val OFFLINE = "offline"
 class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragment.RoverPickerCallback {
     private lateinit var mBinding: FragmentMainBinding
     private lateinit var mViewModel: MainViewModel
+    private lateinit var mNetworkCallback: NetworkCallback
 
     @Inject
     lateinit var connectivityManager: ConnectivityManager
@@ -97,7 +100,7 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragm
 
     override fun onPause() {
         super.onPause()
-        connectivityManager.unregisterNetworkCallback(networkCallback)
+        connectivityManager.unregisterNetworkCallback(mNetworkCallback)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -177,13 +180,17 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragm
 
     private fun prepareNetwork() {
         val networkRequest = NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
-        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+        mNetworkCallback = NetworkCallback()
+        connectivityManager.registerNetworkCallback(networkRequest, mNetworkCallback)
     }
 
-    val networkCallback = object : ConnectivityManager.NetworkCallback() {
-
+    inner class NetworkCallback : ConnectivityManager.NetworkCallback() {
         @NetworkState
-        private var previousState: String? = null
+        private var previousState: String = if (connectivityManager.activeNetworkInfo?.isConnected != true) {
+            OFFLINE
+        } else {
+            ONLINE
+        }
 
         override fun onLost(network: Network?) {
             super.onLost(network)
@@ -197,8 +204,14 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragm
             super.onAvailable(network)
             if (previousState != ONLINE) {
                 Snackbar.make(mBinding.layoutMainFragment, "Back online!", Snackbar.LENGTH_LONG).show()
-                if (mViewModel.roverPhotos.value == null) {
+                if (mViewModel.roverPhotos.value.isNullOrEmpty()) {
                     mViewModel.fetchMostRecentRoverPhotos()
+                } else {
+                    mBinding.cardGridView.adapter?.itemCount?.let {
+                        runBlocking(Dispatchers.Main) {
+                            mBinding.cardGridView.adapter?.notifyItemChanged(it - 1)
+                        }
+                    }
                 }
                 previousState = ONLINE
             }
