@@ -15,6 +15,9 @@ interface RoverPhotoDao {
     @Query("SELECT * FROM $PHOTO_TABLE_NAME")
     fun getAllPhotos(): List<RoverPhoto>
 
+    @Query("SELECT * FROM $MANIFEST_TABLE_NAME")
+    fun getAllManifests(): List<RoverManifest>
+
     @Query("SELECT * FROM $PHOTO_TABLE_NAME WHERE rover LIKE  '%' || :rover || '%' AND sol = :sol")
     fun getRoverPhotosBySol(@Rover rover: String, sol: Int): List<RoverPhoto>
 
@@ -25,7 +28,7 @@ interface RoverPhotoDao {
     fun getRoverPhotos(@Rover rover: String): List<RoverPhoto>
 
     @Insert(onConflict = REPLACE)
-    fun insertManifest(manifest: RoverManifest)
+    fun insertManifest(vararg manifest: RoverManifest)
 
     @Insert(onConflict = REPLACE)
     fun insertAllPhotos(photos: List<RoverPhoto>)

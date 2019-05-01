@@ -22,11 +22,6 @@ data class RoverManifest(
     @Expose
     val maxSol: Int,
 
-    @PrimaryKey
-    val id: Int = when(roverName) {
-        CURIOSITY -> 0
-        OPPORTUNITY -> 1
-        SPIRIT -> 2
-        else -> -1
-    }
+    @PrimaryKey(autoGenerate = true)
+    val id: Int
 )
