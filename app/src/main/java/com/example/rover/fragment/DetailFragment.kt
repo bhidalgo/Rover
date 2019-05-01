@@ -76,7 +76,6 @@ class DetailFragment : Fragment(), CoroutineScope {
                 val scaledBitmap = Bitmap.createScaledBitmap(rawBitmap, scaledWidth, scaledHeight, false)
                 mBinding.detailImageView.setImageBitmap(scaledBitmap)
             }
-            rawBitmap.recycle()
         }
     }
 
