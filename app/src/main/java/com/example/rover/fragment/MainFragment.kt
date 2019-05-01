@@ -87,7 +87,7 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener, RoverPickerFragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBinding.viewModel = mViewModel
-        mBinding.cardGridView.setItemViewCacheSize(100)
+        mBinding.cardGridView.setItemViewCacheSize(50)
         observeRoverPhotos()
     }
 
