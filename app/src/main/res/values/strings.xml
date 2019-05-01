@@ -8,4 +8,5 @@
     <string name="rover_photo_title_format">Taken by %s at %d Sol or on %s</string>
     <string name="loading_text">One sec. while we fetch your photos</string>
     <string name="no_connection">Sorry, but we can\'t load content without a network connection.</string>
+    <string name="too_many_requests">Sorry, but you\'ve hit your API request limit for this demo.</string>
 </resources>

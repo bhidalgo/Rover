@@ -3,16 +3,15 @@ package com.example.rover.viewmodel
 import android.app.Application
 import android.net.ConnectivityManager
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.rover.api.CURIOSITY
 import com.example.rover.api.Rover
+import com.example.rover.api.repository.ApiRequestLimitReachedException
 import com.example.rover.api.repository.RoverPhotoRepository
 import com.example.rover.model.RoverPhoto
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class MainViewModel(application: Application) : AndroidViewModel(application), CoroutineScope {
@@ -39,6 +38,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
         View.GONE
     }
 
+    val apiRequestsErrorVisibility = MutableLiveData<Int>().apply {
+        View.GONE
+    }
+
     override val coroutineContext: CoroutineContext = Dispatchers.Default + Job()
     lateinit var roverPhotoRepository: RoverPhotoRepository
     lateinit var connectivityManager: ConnectivityManager
@@ -48,7 +51,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
             blockScreenToLoad()
         }
 
-        val fetchedPhotos = roverPhotoRepository.getRoverPhotos(rover, sol)
+        val fetchedPhotos = try {
+            roverPhotoRepository.getRoverPhotos(rover, sol)
+        } catch (e: ApiRequestLimitReachedException) {
+            displayTooManyRequests()
+            return@launch
+        }
+
         if (fetchedPhotos == null && connectivityManager.activeNetworkInfo?.isConnected != true && roverPhotos.value == null) {
             displayPersistedPhotos()
         } else if (fetchedPhotos == null && roverPhotos.value != null) {
@@ -65,8 +74,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
             blockScreenToLoad()
         }
 
-        val maxSol = roverPhotoRepository.getRoverManifest(rover)?.maxSol
-        if (maxSol == null && connectivityManager.activeNetworkInfo?.isConnected != true && roverPhotos.value == null) {
+        currentRover = rover
+
+        val maxSol = try {
+            roverPhotoRepository.getRoverManifest(rover)?.maxSol
+        } catch (e: ApiRequestLimitReachedException) {
+            displayTooManyRequests()
+            return@launch
+        }
+
+        if (maxSol == null && connectivityManager.activeNetworkInfo?.isConnected != true && roverPhotos.value.isNullOrEmpty()) {
             displayPersistedPhotos()
         } else if (maxSol == null && roverPhotos.value != null) {
             allowUserToInteractWithPersistedData()
@@ -82,6 +99,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
         contentVisibility.postValue(View.VISIBLE)
         roverPhotosVisibility.postValue(View.GONE)
         loadingProgressBarVisibility.postValue(View.VISIBLE)
+        apiRequestsErrorVisibility.postValue(View.GONE)
     }
 
     private fun allowUserToInteractWithPersistedData() {
@@ -89,6 +107,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application), C
         contentVisibility.postValue(View.VISIBLE)
         loadingProgressBarVisibility.postValue(View.GONE)
         roverPhotosVisibility.postValue(View.VISIBLE)
+        apiRequestsErrorVisibility.postValue(View.GONE)
+    }
+
+    private fun displayTooManyRequests() {
+        if (roverPhotos.value.isNullOrEmpty()) {
+            networkErrorVisibility.postValue(View.GONE)
+            contentVisibility.postValue(View.GONE)
+            loadingProgressBarVisibility.postValue(View.GONE)
+            roverPhotosVisibility.postValue(View.GONE)
+            apiRequestsErrorVisibility.postValue(View.VISIBLE)
+        } else {
+            runBlocking(Dispatchers.Main) {
+                Toast.makeText(getApplication(), "API Request limit reached", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private suspend fun displayPersistedPhotos() {

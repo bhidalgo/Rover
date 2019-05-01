@@ -41,22 +41,13 @@
                     app:spanCount="2"
                     app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-        <FrameLayout
-                android:id="@+id/layout_no_connection"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/semi_transparent_black"
-                android:visibility="@{safeUnbox(viewModel.networkErrorVisibility)}">
-            <TextView
-                    android:id="@+id/no_connection_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_connection"
-                    android:drawableTop="@drawable/ic_space_invaders"
-                    android:drawablePadding="16dp"
-                    android:textAlignment="center"
-                    android:textSize="16sp"
-                    android:layout_gravity="center"/>
-        </FrameLayout>
+
+        <include layout="@layout/layout_no_connection"
+                 android:id="@+id/layout_no_connection"
+                 android:visibility="@{safeUnbox(viewModel.networkErrorVisibility)}"/>
+
+        <include layout="@layout/layout_too_many_requests"
+                 android:id="@+id/layout_too_many_requests"
+                 android:visibility="@{safeUnbox(viewModel.apiRequestsErrorVisibility)}"/>
     </FrameLayout>
 </layout>

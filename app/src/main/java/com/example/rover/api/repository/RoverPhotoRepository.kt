@@ -32,7 +32,11 @@ class RoverPhotoRepository @Inject constructor(private val connectivityManager: 
                 roverPhotoDatabase.roverPhotoDao().insertManifest(responseBody.manifest)
                 responseBody.manifest
             }
-            else -> TODO("Not yet implemented.")
+            response?.code() == 429 -> throw ApiRequestLimitReachedException()
+            else -> {
+                Log.e("RoverPhotoRepository", response?.message() ?: "Could not fetch $rover\'s manifest.")
+                null
+            }
         }
     }
 
@@ -55,12 +59,15 @@ class RoverPhotoRepository @Inject constructor(private val connectivityManager: 
 
         return@coroutineScope when {
             response != null && response.isSuccessful && responseBody != null -> {
-                Log.d("MARSAPI", responseBody.photos.toString())
                 prefetchAndCachePhotos(responseBody.photos)
                 roverPhotoDatabase.roverPhotoDao().insertAllPhotos(responseBody.photos)
                 responseBody.photos
             }
-            else -> TODO("Not yet implemented.")
+            response?.code() == 429 -> throw ApiRequestLimitReachedException()
+            else -> {
+                Log.e("RoverPhotoRepository", response?.message() ?: "Could not fetch $rover\'s photos.")
+                null
+            }
         }
     }
 
@@ -79,3 +86,5 @@ class RoverPhotoRepository @Inject constructor(private val connectivityManager: 
         }
     }
 }
+
+class ApiRequestLimitReachedException : Exception()

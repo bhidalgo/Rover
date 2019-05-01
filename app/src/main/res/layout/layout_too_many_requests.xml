@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/layout_too_many_requests"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/semi_transparent_black">
+        <TextView
+                android:id="@+id/too_many_requests_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/too_many_requests"
+                android:drawableTop="@drawable/ic_clear_red_24dp"
+                android:drawablePadding="16dp"
+                android:padding="16dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+</FrameLayout>
