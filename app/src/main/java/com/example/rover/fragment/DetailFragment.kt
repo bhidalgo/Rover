@@ -69,10 +69,12 @@ class DetailFragment : Fragment(), CoroutineScope {
             }
 
             withContext(Dispatchers.Main) {
+                val aspectRatio: Double = rawBitmap.width.toDouble() / rawBitmap.height
                 val display = resources.displayMetrics
                 val screenDensity = resources.displayMetrics.density
-                val scaledHeight = (rawBitmap.height * screenDensity).toInt().takeUnless { it <  display.heightPixels} ?: display.heightPixels
-                val scaledWidth = (rawBitmap.width * screenDensity).toInt()
+                val scaledHeight = (rawBitmap.height * screenDensity).toInt().takeUnless { it < display.heightPixels }
+                    ?: display.heightPixels
+                val scaledWidth = (scaledHeight * aspectRatio).toInt()
                 val scaledBitmap = Bitmap.createScaledBitmap(rawBitmap, scaledWidth, scaledHeight, false)
                 mBinding.detailImageView.setImageBitmap(scaledBitmap)
             }
