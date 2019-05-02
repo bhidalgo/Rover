@@ -7,4 +7,8 @@ import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestRoverApplication::class)
-abstract class BaseTest
+abstract class BaseTest {
+    inline fun <reified T: Any> Any.cast(): T {
+        return this as T
+    }
+}
