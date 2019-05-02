@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 fun FragmentActivity.initializeMainFragment() {
     val mainFragment = MainFragment()
     supportFragmentManager.beginTransaction()
-        .add(R.id.fragment_host, mainFragment)
+        .add(R.id.fragment_host, mainFragment, MainFragment::class.java.name)
         .commit()
 }
 

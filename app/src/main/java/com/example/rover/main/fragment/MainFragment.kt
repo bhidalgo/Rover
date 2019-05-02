@@ -66,6 +66,7 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener,
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        retainInstance = true
         roverComponent.inject(this)
     }
 
@@ -147,7 +148,7 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener,
         v?.let {
             val binding = DataBindingUtil.getBinding<ViewDataBinding>(v)
             when (binding) {
-                is ListItemRoverCardBinding -> activity?.navigateToDetailFragment(
+                is ListItemRoverCardBinding -> requireActivity().navigateToDetailFragment(
                     binding.roverPhoto?.imgSrc,
                     binding.roverTextView.text.toString()
                 )
