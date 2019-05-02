@@ -18,17 +18,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         (application as RoverApplication).roverComponent.inject(this)
+
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
         if (supportFragmentManager.findFragmentById(R.id.fragment_host) == null) {
             initializeMainFragment()
         }
     }
-
-
+    
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //Trigger the current fragment's method as well.
         supportFragmentManager.findFragmentById(R.id.fragment_host)?.onOptionsItemSelected(item)
+
         return when (item.itemId) {
+            //Back button pressed.
             android.R.id.home -> {
                 onBackPressed()
                 true
@@ -41,21 +46,7 @@ class MainActivity : AppCompatActivity() {
         if (filterEnabled) {
             menuInflater.inflate(R.menu.filter_menu, menu)
         }
+
         return super.onCreateOptionsMenu(menu)
     }
-}
-
-fun FragmentActivity.initializeMainFragment() {
-    val mainFragment = MainFragment()
-    supportFragmentManager.beginTransaction()
-        .add(R.id.fragment_host, mainFragment, MainFragment::class.java.name)
-        .commit()
-}
-
-fun FragmentActivity.navigateToDetailFragment(imgSrc: String?, imgTitle: String) {
-    val detailFragment = DetailFragment.newInstance(imgSrc, imgTitle)
-    supportFragmentManager.beginTransaction()
-        .replace(R.id.fragment_host, detailFragment)
-        .addToBackStack(DetailFragment::class.java.name)
-        .commit()
 }

@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.rover.dal.api.CURIOSITY
 import com.example.rover.dal.api.Rover
-import com.example.rover.dal.repository.ApiRequestLimitReachedException
+import com.example.rover.dal.exception.ApiRequestLimitReachedException
 import com.example.rover.dal.repository.RoverPhotoRepository
 import com.example.rover.model.RoverPhoto
 import kotlinx.coroutines.*
