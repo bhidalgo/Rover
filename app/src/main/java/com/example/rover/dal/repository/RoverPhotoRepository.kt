@@ -50,7 +50,7 @@ class RoverPhotoRepository @Inject constructor(private val connectivityManager: 
     }
 
     suspend fun getRoverPhotos(@Rover rover: String, sol: Int): ArrayList<RoverPhoto>? = coroutineScope {
-        roverPhotoDatabase.roverPhotoDao().getRoverPhotosBySol(rover, sol).takeUnless { it.isEmpty() }?.let {
+        roverPhotoDatabase.roverPhotoDao().getRoverPhotosBySol(rover, sol)?.takeUnless { it.isEmpty() }?.let {
             return@coroutineScope ArrayList<RoverPhoto>().apply {
                 addAll(it)
             }
