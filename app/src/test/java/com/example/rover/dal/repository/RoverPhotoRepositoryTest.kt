@@ -20,13 +20,11 @@ import okhttp3.ResponseBody
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.BDDMockito.given
 import org.mockito.Mockito.*
 import retrofit2.Call
 import retrofit2.Response
-import java.lang.IllegalStateException
 
 class RoverPhotoRepositoryTest : BaseTest() {
     private lateinit var mSubject: RoverPhotoRepository
@@ -99,7 +97,8 @@ class RoverPhotoRepositoryTest : BaseTest() {
         try {
             requestManifest()
             fail()
-        } catch(e: ApiRequestLimitReachedException) {}
+        } catch (e: ApiRequestLimitReachedException) {
+        }
     }
 
     @Test
@@ -112,14 +111,16 @@ class RoverPhotoRepositoryTest : BaseTest() {
 
     @Test
     fun `when fetching rover photo and database contains value then we should return database value`() {
-        val expectedRoverPhotos: ArrayList<RoverPhoto> = arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
+        val expectedRoverPhotos: ArrayList<RoverPhoto> =
+            arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
         stubDatabaseToReturnPhotos(expectedRoverPhotos)
         assertEquals(expectedRoverPhotos, requestRover())
     }
 
     @Test
     fun `when fetching rover photo and database contains value then we should not request photo from api`() {
-        val expectedRoverPhotos: ArrayList<RoverPhoto> = arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
+        val expectedRoverPhotos: ArrayList<RoverPhoto> =
+            arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
         stubDatabaseToReturnPhotos(expectedRoverPhotos)
         requestRover()
         verify(mMockMarsRoverApi, never()).getRoverPhotos(anyString(), anyInt(), anyString(), anyInt())
@@ -134,7 +135,8 @@ class RoverPhotoRepositoryTest : BaseTest() {
 
     @Test
     fun `when fetching rover photo from api then we should return api response value`() {
-        val expectedRoverPhotos: ArrayList<RoverPhoto> = arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
+        val expectedRoverPhotos: ArrayList<RoverPhoto> =
+            arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
         stubDatabaseToReturnPhotos(null)
         stubUserConnectedToNetwork(true)
         stubApiToReturnRoverPhotos(expectedRoverPhotos)
@@ -143,7 +145,8 @@ class RoverPhotoRepositoryTest : BaseTest() {
 
     @Test
     fun `when fetching rover photo from api and response is successful then we should store the photos into the database`() {
-        val expectedRoverPhotos: ArrayList<RoverPhoto> = arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
+        val expectedRoverPhotos: ArrayList<RoverPhoto> =
+            arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
         stubDatabaseToReturnPhotos(null)
         stubUserConnectedToNetwork(true)
         stubApiToReturnRoverPhotos(expectedRoverPhotos)
@@ -167,7 +170,8 @@ class RoverPhotoRepositoryTest : BaseTest() {
         try {
             requestRover()
             fail()
-        } catch(e: ApiRequestLimitReachedException) { }
+        } catch (e: ApiRequestLimitReachedException) {
+        }
     }
 
     @Test
@@ -184,12 +188,16 @@ class RoverPhotoRepositoryTest : BaseTest() {
         given(mMockRoverPhotoDatabase.roverPhotoDao()).willReturn(mockDao)
     }
 
-    private fun stubApiToReturnRoverPhotos(value: ArrayList<RoverPhoto>?, isSuccess: Boolean = true, errorCode: Int = 400, @Rover forRover: String? = null) {
+    private fun stubApiToReturnRoverPhotos(
+        value: ArrayList<RoverPhoto>?,
+        isSuccess: Boolean = true,
+        errorCode: Int = 400, @Rover forRover: String? = null
+    ) {
         val expectedPhotoResponse = value?.let {
             RoverPhotosResponse(it)
         }
 
-        val testResponse = if(isSuccess) {
+        val testResponse = if (isSuccess) {
             Response.success(expectedPhotoResponse)
         } else {
             Response.error(errorCode, ResponseBody.create(MediaType.get("application/json"), "{}"))
@@ -198,7 +206,16 @@ class RoverPhotoRepositoryTest : BaseTest() {
         val mockApiCall: Call<RoverPhotosResponse> = mock(Call::class.java).cast()
 
         given(mockApiCall.execute()).willReturn(testResponse)
-        given(mMockMarsRoverApi.getRoverPhotos(forRover ?: anyString(), anyInt(), anyString(), anyInt())).willReturn(mockApiCall)
+        given(mMockMarsRoverApi.getRoverPhotos(forRover ?: anyString(), anyInt(), anyString(), anyInt())).willReturn(
+            mockApiCall
+        )
+    }
+
+    @Test
+    fun `when fetching persisted photos from database then we should return value`() {
+        val expectedPhotos = arrayListOf(mock(RoverPhoto::class.java), mock(RoverPhoto::class.java))
+        stubDatabaseToReturnPersistedPhotos(expectedPhotos)
+        assertEquals(expectedPhotos, requestPersistedPhotos())
     }
 
     private fun stubDatabaseToReturnManifest(value: RoverManifest?, @Rover forRover: String? = null) {
@@ -207,12 +224,16 @@ class RoverPhotoRepositoryTest : BaseTest() {
         given(mMockRoverPhotoDatabase.roverPhotoDao()).willReturn(mockDao)
     }
 
-    private fun stubApiToReturnManifest(value: RoverManifest?, isSuccess: Boolean = true, errorCode: Int = 400, @Rover forRover: String? = null) {
+    private fun stubApiToReturnManifest(
+        value: RoverManifest?,
+        isSuccess: Boolean = true,
+        errorCode: Int = 400, @Rover forRover: String? = null
+    ) {
         val expectedManifestResponse = value?.let {
             RoverManifestResponse(value)
         }
 
-        val testResponse = if(isSuccess) {
+        val testResponse = if (isSuccess) {
             Response.success(expectedManifestResponse)
         } else {
             Response.error(errorCode, ResponseBody.create(MediaType.get("application/json"), "{}"))
@@ -230,11 +251,23 @@ class RoverPhotoRepositoryTest : BaseTest() {
         given(mMockConnectivityManager.activeNetworkInfo).willReturn(mockActiveNetworkInfo)
     }
 
-    private fun requestManifest(@Rover forRover: String = CURIOSITY): RoverManifest? = runBlocking(Dispatchers.Unconfined) {
-        mSubject.getRoverManifest(forRover)
+    private fun requestManifest(@Rover forRover: String = CURIOSITY): RoverManifest? =
+        runBlocking(Dispatchers.Unconfined) {
+            mSubject.getRoverManifest(forRover)
+        }
+
+    private fun requestRover(@Rover forRover: String = CURIOSITY, sol: Int = 0): ArrayList<RoverPhoto>? =
+        runBlocking(Dispatchers.Unconfined) {
+            mSubject.getRoverPhotos(forRover, sol)
+        }
+
+    private fun requestPersistedPhotos(@Rover forRover: String = CURIOSITY) = runBlocking(Dispatchers.Unconfined) {
+        mSubject.getPersistedPhotos(forRover)
     }
 
-    private fun requestRover(@Rover forRover: String = CURIOSITY, sol: Int = 0): ArrayList<RoverPhoto>? = runBlocking(Dispatchers.Unconfined) {
-        mSubject.getRoverPhotos(forRover, sol)
+    private fun stubDatabaseToReturnPersistedPhotos(value: ArrayList<RoverPhoto>, @Rover forRover: String? = CURIOSITY) {
+        val mockDao = mock(RoverPhotoDao::class.java)
+        given(mockDao.getRoverPhotos(forRover ?: anyString())).willReturn(value)
+        given(mMockRoverPhotoDatabase.roverPhotoDao()).willReturn(mockDao)
     }
 }

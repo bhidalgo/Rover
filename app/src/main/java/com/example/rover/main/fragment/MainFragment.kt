@@ -33,6 +33,7 @@ import com.example.rover.util.enableBackButton
 import com.example.rover.util.enableFilterRoverList
 import com.example.rover.util.roverComponent
 import com.example.rover.main.viewmodel.MainViewModel
+import com.example.rover.util.isConnectedToNetwork
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -58,7 +59,7 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener,
     override var canLoadMorePhotos: Boolean = true
         get() {
             return try {
-                connectivityManager.activeNetworkInfo?.isConnected == true && field
+                connectivityManager.isConnectedToNetwork() && field
             } catch (e: Exception) {
                 false
             }
@@ -188,7 +189,7 @@ class MainFragment : Fragment(), RoverPhotoAdapterViewListener,
 
     inner class NetworkCallback : ConnectivityManager.NetworkCallback() {
         @NetworkState
-        private var previousState: String = if (connectivityManager.activeNetworkInfo?.isConnected != true) {
+        private var previousState: String = if (!connectivityManager.isConnectedToNetwork()) {
             OFFLINE
         } else {
             ONLINE
